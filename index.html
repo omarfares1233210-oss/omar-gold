@@ -2,75 +2,552 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101317">
   <title>عمر الذهب | Omer Gold</title>
-  <style>
-    :root{--bg:#101317;--card:#191e24;--line:#2a3038;--gold:#e8bd62;--text:#f5f1e8;--muted:#a8adb5;--green:#45c486;--red:#ff6671}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
-    header{padding:18px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .brand{font-size:21px;font-weight:800;color:var(--gold)}
-    .actions{display:flex;gap:8px}
-    button,select,input{font:inherit}
-    button,select{border:جهزت لك نموذجًا متوافقًا مع الهاتف باسم **عمر الذهب**، بالعربية والإنجليزية. انسخ الكود واحفظه في ملف باسم `index.html`:
 
-```html
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>عمر الذهب | Omer Gold</title>
-<style>
-:root{--bg:#101317;--card:#191e24;--line:#2a3038;--gold:#e8bd62;--text:#f5f1e8;--muted:#a8adb5;--green:#45c486;--red:#ff6671}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
-header{padding:18px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}
-.brand{font-size:21px;font-weight:800;color:var(--gold)}
-.actions{display:flex;gap:8px}
-button,select,input{font:inherit}
-button,select{border:1px solid var(--line);border-radius:10px;background:#222830;color:var(--text);padding:9px 12px}
-button{cursor:pointer}
-button:hover{border-color:var(--gold)}
-main{max-width:900px;margin:20px auto;padding:0 14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:17px;margin-bottom:14px}
-.topline{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-h1{font-size:20px;margin:0}
-.muted,.note{color:var(--muted);font-size:13px}
-.price{font-size:clamp(34px,9vw,56px);font-weight:800;margin:12px 0 2px}
-.change{font-weight:700}
-.green{color:var(--green)}.red{color:var(--red)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.tile{padding:13px;border:1px solid var(--line);border-radius:12px}
-.tile b{display:block;font-size:20px;margin-top:7px}
-.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-#chart{width:100%;height:120px;margin-top:10px}
-.forecast{line-height:1.8}
-details summary{cursor:pointer;color:var(--gold);font-weight:700}
-label{display:block;margin:12px 0 5px}
-input{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:#11161b;color:var(--text)}
-.settings{margin-top:12px}
-.status{font-size:13px;color:var(--muted);margin-top:8px}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:12px 16px 25px}
-@media(max-width:520px){header{align-items:flex-start}.card{padding:14px}}
-</style>
+  <style>
+    :root {
+      --bg:#101317;
+      --panel:#191e24;
+      --panel2:#222830;
+      --line:#303741;
+      --gold:#e8bd62;
+      --text:#f5f1e8;
+      --muted:#a8adb5;
+      --green:#45c486;
+      --red:#ff6671;
+    }
+
+    * { box-sizing:border-box }
+
+    body {
+      margin:0;
+      background:
+        radial-gradient(ellipse at 50% -15%, #4c391a 0, transparent 42%),
+        var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    }
+
+    button, select, input { font:inherit }
+    button, select, input {
+      color:var(--text);
+      background:var(--panel2);
+      border:1px solid var(--line);
+      border-radius:12px;
+    }
+
+    button {
+      cursor:pointer;
+      padding:10px 13px;
+      transition:transform .15s ease,border-color .15s ease,background .15s ease;
+    }
+
+    button:hover { border-color:var(--gold); transform:translateY(-1px) }
+    button:active { transform:scale(.98) }
+    select, input { padding:11px 12px }
+    input { width:100% }
+    input:focus,select:focus { outline:2px solid #e8bd6255; border-color:var(--gold) }
+
+    header {
+      position:sticky;
+      top:0;
+      z-index:5;
+      background:#101317ed;
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);
+    }
+
+    .header-inner {
+      max-width:920px;
+      margin:auto;
+      padding:12px 15px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .brand { color:var(--gold); font-size:21px; font-weight:800 }
+    .header-actions,.nav,.inline { display:flex; align-items:center; gap:8px }
+    .header-actions button { padding:9px 11px }
+
+    main { max-width:920px; margin:18px auto; padding:0 14px }
+    .nav { overflow:auto; padding:2px 0 12px; justify-content:flex-start }
+    .nav a {
+      white-space:nowrap;
+      text-decoration:none;
+      color:var(--text);
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:9px 13px;
+      font-size:14px;
+    }
+    .nav a:hover { border-color:var(--gold); color:var(--gold) }
+
+    .card {
+      background:linear-gradient(145deg,#1c2229,#171b20);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      margin-bottom:14px;
+      scroll-margin-top:80px;
+      box-shadow:0 10px 28px #0002;
+    }
+
+    .topline {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    h1,h2,h3 { margin:0 }
+    h1 { font-size:20px }
+    h2 { font-size:19px }
+    p { line-height:1.8 }
+    .muted,.note { color:var(--muted); font-size:13px; line-height:1.7 }
+    .price { font-size:clamp(35px,10vw,58px); font-weight:800; margin:10px 0 0 }
+    .change { margin-top:4px; font-weight:700 }
+    .green { color:var(--green) }
+    .red { color:var(--red) }
+    .gold { color:var(--gold) }
+
+    .refresh-button {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      background:linear-gradient(135deg,#e8bd62,#c99539);
+      border:0;
+      color:#17130b;
+      font-weight:800;
+    }
+    .refresh-button:hover { background:#f0cc7c; border:0 }
+    .refresh-button:disabled { opacity:.65; cursor:wait; transform:none }
+
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; margin-top:14px }
+    .tile {
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#ffffff05;
+    }
+    .tile-label { color:var(--muted); font-size:13px }
+    .tile b { display:block; margin-top:8px; font-size:18px; overflow-wrap:anywhere }
+    .status { margin-top:10px; color:var(--muted); font-size:13px; line-height:1.7 }
+    .status.error { color:var(--red) }
+    .status.success { color:var(--green) }
+    .note { margin-bottom:0 }
+    .forecast-box { border-inline-start:3px solid var(--gold); padding:8px 13px; margin-top:12px; line-height:1.8 }
+    #chart { display:block; width:100%; height:140px; margin-top:12px }
+    .chart-empty { color:var(--muted); padding:20px 0 }
+    .settings-panel { margin-top:14px }
+    .settings-panel summary { cursor:pointer; color:var(--gold); font-weight:750; padding:5px 0 }
+    .settings-body { padding-top:8px }
+    label { display:block; margin:13px 0 6px; font-size:14px }
+    .button-row { display:flex; gap:9px; flex-wrap:wrap; margin-top:14px }
+    .secondary-button { background:transparent }
+    footer { text-align:center; color:var(--muted); font-size:12px; padding:10px 15px 28px }
+
+    @media(max-width:520px) {
+      .header-inner { align-items:flex-start }
+      .brand { font-size:18px }
+      .header-actions { gap:6px }
+      .header-actions button { padding:8px 9px; font-size:13px }
+      .card { padding:15px }
+      .grid { gap:9px }
+      .tile { padding:12px }
+      .tile b { font-size:16px }
+    }
+  </style>
 </head>
+
 <body>
 <header>
-  <div class="brand">✦ <span data-ar="عمر الذهب" data-en="Omer Gold">عمر الذهب</span></div>
-  <div class="actions">
-    <button id="langBtn">English</button>
-    <button onclick="document.querySelector('#settings').open=true" data-ar="الإعدادات" data-en="Settings">الإعدادات</button>
+  <div class="header-inner">
+    <div class="brand">✦ <span data-ar="عمر الذهب" data-en="Omer Gold">عمر الذهب</span></div>
+    <div class="header-actions">
+      <button id="languageButton" type="button" aria-label="تغيير اللغة">English</button>
+      <button id="openSettingsButton" type="button">
+        ⚙ <span data-ar="الإعدادات" data-en="Settings">الإعدادات</span>
+      </button>
+    </div>
   </div>
 </header>
 
 <main>
-  <section class="card">
-    <div class="topline">
-  <h1 data-ar="سعر الذهب الفوري" data-en="Live Gold Price">سعر الذهب الفوري</h1>
-  <button id="refresh" data-ar="تحديث السعر" data-en="Refresh price">تحديث السعر</button>
-</div>
+  <nav class="nav" aria-label="روابط أقسام الموقع">
+    <a href="#market" data-ar="السعر" data-en="Price">السعر</a>
+    <a href="#karats" data-ar="العيارات" data-en="Karats">العيارات</a>
+    <a href="#history" data-ar="السجل السابق" data-en="History">السجل السابق</a>
+    <a href="#forecast" data-ar="التوقع" data-en="Outlook">التوقع</a>
+    <a href="#factors" data-ar="العوامل" data-en="Factors">العوامل</a>
+  </nav>
 
-    
-```html
-<button id="refresh" data-ar="تحديث السعر" data-en="Refresh price">تحديث السعر</button>
+  <section class="card" id="market">
+    <div class="topline">
+      <div>
+        <h1 data-ar="سعر الذهب الفوري" data-en="Live gold price">سعر الذهب الفوري</h1>
+        <div class="muted" data-ar="سعر أونصة الذهب بالدولار الأمريكي" data-en="Gold price per troy ounce in US dollars">سعر أونصة الذهب بالدولار الأمريكي</div>
+      </div>
+      <button class="refresh-button" id="refreshButton" type="button">
+        <span aria-hidden="true">↻</span>
+        <span data-ar="تحديث السعر" data-en="Refresh price">تحديث السعر</span>
+      </button>
+    </div>
+
+    <div class="price" id="ouncePrice">—</div>
+    <div class="change" id="priceChange">—</div>
+    <div class="status" id="statusText">أضف مفتاح API في الإعدادات، ثم اضغط «تحديث السعر».</div>
+  </section>
+
+  <section class="card" id="karats">
+    <div class="topline">
+      <h2 data-ar="سعر الغرام حسب العيار" data-en="Price per gram by karat">سعر الغرام حسب العيار</h2>
+      <select id="currencySelect" aria-label="اختر العملة">
+        <option value="USD">USD — دولار</option>
+        <option value="SAR">SAR — ريال سعودي</option>
+        <option value="SYP">SYP — ليرة سورية</option>
+      </select>
+    </div>
+    <div class="grid">
+      <div class="tile"><span class="tile-label">عيار 24</span><b id="karat24">—</b></div>
+      <div class="tile"><span class="tile-label">عيار 22</span><b id="karat22">—</b></div>
+      <div class="tile"><span class="tile-label">عيار 21</span><b id="karat21">—</b></div>
+      <div class="tile"><span class="tile-label">عيار 18</span><b id="karat18">—</b></div>
+    </div>
+    <p class="note" data-ar="السعر تقديري للذهب الخام، وقد يختلف سعر المحل بسبب المصنعية والضرائب وسعر الصرف المحلي." data-en="Indicative raw-gold prices. Shop prices may differ due to workmanship, taxes, and local exchange rates.">السعر تقديري للذهب الخام، وقد يختلف سعر المحل بسبب المصنعية والضرائب وسعر الصرف المحلي.</p>
+  </section>
+
+  <section class="card" id="history">
+    <div class="topline">
+      <h2 data-ar="سجل الأسعار" data-en="Price history">سجل الأسعار</h2>
+      <select id="historyDay" aria-label="اختر اليوم">
+        <option value="0">اليوم</option>
+        <option value="1">أمس</option>
+        <option value="2">قبل أمس</option>
+        <option value="7">قبل أسبوع</option>
+        <option value="30">قبل شهر</option>
+      </select>
+    </div>
+    <div class="price" style="font-size:30px" id="historyPrice">—</div>
+    <svg id="chart" viewBox="0 0 600 140" preserveAspectRatio="none" aria-label="رسم سجل الأسعار"></svg>
+    <p class="note" id="historyMessage">يُحفظ السجل من أول تحديث على هذا الجهاز؛ لن تظهر تواريخ سابقة لم تُسجّل من قبل.</p>
+  </section>
+
+  <section class="card" id="forecast">
+    <h2 data-ar="اتجاه السعر القادم" data-en="Indicative price direction">اتجاه السعر القادم</h2>
+    <div class="forecast-box" id="forecastText">سيظهر اتجاه تقريبي بعد حفظ أكثر من قراءة للسعر.</div>
+    <p class="note" data-ar="هذا تقدير حسابي بسيط من قراءات الموقع السابقة، وليس ضمانًا للسعر القادم أو نصيحة استثمارية." data-en="This is a simple estimate from saved readings, not a guarantee or investment advice.">هذا تقدير حسابي بسيط من قراءات الموقع السابقة، وليس ضمانًا للسعر القادم أو نصيحة استثمارية.</p>
+  </section>
+
+  <section class="card" id="factors">
+    <h2 data-ar="أسباب قد تؤثر في الذهب" data-en="Factors that may affect gold">أسباب قد تؤثر في الذهب</h2>
+    <p data-ar="من العوامل المحتملة: أسعار الفائدة، قوة الدولار، التضخم، مشتريات البنوك المركزية، والتوترات السياسية. هذه عوامل عامة؛ الموقع لا يتحقق من أخبار اليوم ولا يجزم بسبب حركة السعر." data-en="Possible factors include interest rates, the US dollar, inflation, central-bank purchases, and geopolitical tensions. These are general factors; this site does not verify today's news or claim a specific cause for price moves.">من العوامل المحتملة: أسعار الفائدة، قوة الدولار، التضخم، مشتريات البنوك المركزية، والتوترات السياسية. هذه عوامل عامة؛ الموقع لا يتحقق من أخبار اليوم ولا يجزم بسبب حركة السعر.</p>
+  </section>
+
+  <details class="card settings-panel" id="settingsPanel">
+    <summary data-ar="إعدادات الموقع والعملات" data-en="Site and currency settings">إعدادات الموقع والعملات</summary>
+    <div class="settings-body">
+      <label for="apiKey" data-ar="مفتاح API لأسعار الذهب" data-en="Gold-price API key">مفتاح API لأسعار الذهب</label>
+      <input id="apiKey" type="password" autocomplete="off" placeholder="API key">
+
+      <label for="sypRate" data-ar="عدد الليرات السورية لكل دولار (أدخل السعر الذي تريد عرضه)" data-en="Syrian pounds per US dollar (enter the rate you want to display)">عدد الليرات السورية لكل دولار (أدخل السعر الذي تريد عرضه)</label>
+      <input id="sypRate" type="number" min="0" step="any" placeholder="أدخل سعر الصرف">
+
+      <label for="sarRate" data-ar="عدد الريالات السعودية لكل دولار" data-en="Saudi riyals per US dollar">عدد الريالات السعودية لكل دولار</label>
+      <input id="sarRate" type="number" min="0" step="any" value="3.75">
+
+      <div class="button-row">
+        <button id="saveSettingsButton" type="button" data-ar="حفظ الإعدادات" data-en="Save settings">حفظ الإعدادات</button>
+        <button id="closeSettingsButton" class="secondary-button" type="button" data-ar="إغلاق الإعدادات" data-en="Close settings">إغلاق الإعدادات</button>
+      </div>
+
+      <p class="note" data-ar="هذه النسخة تحفظ الإعدادات في المتصفح الحالي. لا تضع مفتاح API سريًا في موقع عام؛ جعل السعر متاحًا لجميع الزوار بأمان يحتاج إلى خادم وسيط." data-en="This version saves settings in the current browser. Do not expose a secret API key on a public site; securely sharing prices with all visitors requires a backend service.">هذه النسخة تحفظ الإعدادات في المتصفح الحالي. لا تضع مفتاح API سريًا في موقع عام؛ جعل السعر متاحًا لجميع الزوار بأمان يحتاج إلى خادم وسيط.</p>
+    </div>
+  </details>
+</main>
+
+<footer>
+  Omer Gold ·
+  <span data-ar="الأسعار إرشادية وليست عرضًا للبيع." data-en="Indicative prices only; not an offer to sell.">الأسعار إرشادية وليست عرضًا للبيع.</span>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  const byId = id => document.getElementById(id);
+  const SETTINGS_KEY = "omerGoldSettings";
+  const HISTORY_KEY = "omerGoldHistory";
+  const LANGUAGE_KEY = "omerGoldLanguage";
+
+  function readStorage(key, fallback) {
+    try {
+      const value = JSON.parse(localStorage.getItem(key));
+      return value === null ? fallback : value;
+    } catch {
+      return fallback;
+    }
+  }
+
+  let language = localStorage.getItem(LANGUAGE_KEY) || "ar";
+  let settings = readStorage(SETTINGS_KEY, {
+    apiKey: "",
+    sypRate: "",
+    sarRate: "3.75"
+  });
+  let history = readStorage(HISTORY_KEY, []);
+  if (!Array.isArray(history)) history = [];
+
+  let ounceUSD = null;
+
+  byId("apiKey").value = settings.apiKey || "";
+  byId("sypRate").value = settings.sypRate || "";
+  byId("sarRate").value = settings.sarRate || "3.75";
+
+  function t(ar, en) {
+    return language === "ar" ? ar : en;
+  }
+
+  function dayKey(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function formatMoney(number, currency) {
+    if (!Number.isFinite(number)) return "—";
+    const digits = currency === "SYP" ? 0 : 2;
+    return new Intl.NumberFormat(language === "ar" ? "ar" : "en", {
+      maximumFractionDigits: digits
+    }).format(number) + " " + currency;
+  }
+
+  function setLanguage(nextLanguage) {
+    language = nextLanguage;
+    localStorage.setItem(LANGUAGE_KEY, language);
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+
+    document.querySelectorAll("[data-ar][data-en]").forEach(element => {
+      element.textContent = element.dataset[language];
+    });
+
+    byId("languageButton").textContent = language === "ar" ? "English" : "العربية";
+
+    const historyOptions = byId("historyDay").options;
+    const arDays = ["اليوم", "أمس", "قبل أمس", "قبل أسبوع", "قبل شهر"];
+    const enDays = ["Today", "Yesterday", "Two days ago", "A week ago", "A month ago"];
+    for (let i = 0; i < historyOptions.length; i++) {
+      historyOptions[i].textContent = language === "ar" ? arDays[i] : enDays[i];
+    }
+
+    render();
+  }
+
+  function exchangeRate() {
+    const currency = byId("currencySelect").value;
+    if (currency === "USD") return 1;
+    if (currency === "SAR") return Number(settings.sarRate) > 0 ? Number(settings.sarRate) : 3.75;
+    return Number(settings.sypRate) > 0 ? Number(settings.sypRate) : null;
+  }
+
+  function drawChart() {
+    const svg = byId("chart");
+    const values = history.slice(-30).map(item => Number(item.price)).filter(Number.isFinite);
+
+    if (values.length < 2) {
+      svg.innerHTML = "";
+      return;
+    }
+
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const range = max - min || 1;
+    const points = values.map((value, index) => {
+      const x = index * 600 / (values.length - 1);
+      const y = 125 - ((value - min) / range) * 110;
+      return `${x},${y}`;
+    }).join(" ");
+
+    svg.innerHTML =
+      '<polyline points="' + points +
+      '" fill="none" stroke="#e8bd62" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline>';
+  }
+
+  function render() {
+    if (ounceUSD === null) return;
+
+    byId("ouncePrice").textContent = formatMoney(ounceUSD, "USD");
+
+    const currency = byId("currencySelect").value;
+    const rate = exchangeRate();
+    const gram24USD = ounceUSD / 31.1034768;
+
+    [
+      ["karat24", 24],
+      ["karat22", 22],
+      ["karat21", 21],
+      ["karat18", 18]
+    ].forEach(([id, karat]) => {
+      byId(id).textContent = rate
+        ? formatMoney(gram24USD * (karat / 24) * rate, currency)
+        : t("أدخل سعر الليرة في الإعدادات", "Enter the Syrian-pound rate in Settings");
+    });
+
+    const selectedOffset = Number(byId("historyDay").value);
+    const wantedDate = new Date();
+    wantedDate.setDate(wantedDate.getDate() - selectedOffset);
+    const wantedKey = dayKey(wantedDate);
+    const matching = history.filter(item => item.day === wantedKey);
+    const savedForDay = matching.length ? matching[matching.length - 1] : null;
+
+    byId("historyPrice").textContent = savedForDay
+      ? formatMoney(Number(savedForDay.price), "USD")
+      : t("لا توجد قراءة محفوظة لهذا اليوم", "No reading saved for this day");
+
+    byId("historyMessage").textContent = t(
+      "السجل محفوظ على هذا الجهاز من وقت أول تحديث؛ لا تتوفر بيانات للأيام التي سبقت ذلك.",
+      "History is saved on this device from the first refresh; earlier dates are not available."
+    );
+
+    const recent = history.slice(-2);
+    if (recent.length >= 2) {
+      const change = Number(recent[recent.length - 1].price) - Number(recent[recent.length - 2].price);
+      const direction = change > 0 ? t("صاعد", "upward") : change < 0 ? t("هابط", "downward") : t("مستقر", "stable");
+      byId("forecastText").textContent =
+        t("الاتجاه بين آخر قراءتين: ", "Direction between the last two readings: ") +
+        direction + " — " + formatMoney(Math.abs(change), "USD") +
+        t(" للأونصة. هذا اتجاه حسابي قصير ولا يضمن حركة السعر القادمة.", " per ounce. This short-term calculation does not predict future prices.");
+    } else {
+      byId("forecastText").textContent = t(
+        "سيظهر اتجاه تقريبي بعد حفظ قراءتين مختلفتين على الأقل.",
+        "An indicative direction will appear after at least two readings are saved."
+      );
+    }
+
+    drawChart();
+  }
+
+  async function refreshPrice() {
+    const apiKey = settings.apiKey.trim();
+
+    if (!apiKey) {
+      byId("statusText").className = "status error";
+      byId("statusText").textContent = t(
+        "أدخل مفتاح API في الإعدادات ثم اضغط حفظ الإعدادات.",
+        "Enter an API key in Settings, then save your settings."
+      );
+      return;
+    }
+
+    const button = byId("refreshButton");
+    button.disabled = true;
+    byId("statusText").className = "status";
+    byId("statusText").textContent = t("جارٍ جلب السعر…", "Loading price…");
+
+    try {
+      const url = "https://api.metals.dev/v1/latest?api_key=" +
+        encodeURIComponent(apiKey) + "&currency=USD&unit=toz";
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("HTTP " + response.status);
+
+      const data = await response.json();
+      const receivedPrice = Number(
+        data && data.metals
+          ? (data.metals.gold ?? data.metals.XAU)
+          : data.gold
+      );
+
+      if (!Number.isFinite(receivedPrice) || receivedPrice <= 0) {
+        throw new Error("Gold price missing from API response");
+      }
+
+      const previousRecord = history.length ? history[history.length - 1] : null;
+      ounceUSD = receivedPrice;
+
+      const now = new Date();
+      history.push({
+        day: dayKey(now),
+        time: now.toISOString(),
+        price: receivedPrice
+      });
+      history = history.slice(-500);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+
+      if (previousRecord) {
+        const difference = receivedPrice - Number(previousRecord.price);
+        const arrow = difference > 0 ? "▲" : difference < 0 ? "▼" : "●";
+        const color = difference > 0 ? "green" : difference < 0 ? "red" : "";
+        const percent = Number(previousRecord.price)
+          ? (difference / Number(previousRecord.price) * 100).toFixed(2)
+          : "0.00";
+
+        byId("priceChange").className = "change " + color;
+        byId("priceChange").textContent =
+          arrow + " " + formatMoney(Math.abs(difference), "USD") + " (" + percent + "%)";
+      } else {
+        byId("priceChange").className = "change";
+        byId("priceChange").textContent = t("تم جلب أول قراءة", "First reading loaded");
+      }
+
+      byId("statusText").className = "status success";
+      byId("statusText").textContent =
+        t("آخر تحديث: ", "Last updated: ") +
+        now.toLocaleString(language === "ar" ? "ar" : "en");
+
+      render();
+    } catch (error) {
+      byId("statusText").className = "status error";
+      byId("statusText").textContent = t(
+        "لم ينجح جلب السعر. تحقق من مفتاح API والاتصال بالإنترنت.",
+        "Could not load the price. Check the API key and your internet connection."
+      );
+      console.error(error);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  byId("languageButton").addEventListener("click", () => {
+    setLanguage(language === "ar" ? "en" : "ar");
+  });
+
+  byId("openSettingsButton").addEventListener("click", () => {
+    const panel = byId("settingsPanel");
+    panel.open = true;
+    panel.scrollIntoView({ behavior:"smooth", block:"center" });
+  });
+
+  byId("closeSettingsButton").addEventListener("click", () => {
+    byId("settingsPanel").open = false;
+  });
+
+  byId("saveSettingsButton").addEventListener("click", () => {
+    settings = {
+      apiKey: byId("apiKey").value.trim(),
+      sypRate: byId("sypRate").value,
+      sarRate: byId("sarRate").value
+    };
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    byId("statusText").className = "status success";
+    byId("statusText").textContent = t("تم حفظ الإعدادات على هذا الجهاز.", "Settings saved on this device.");
+    render();
+  });
+
+  byId("refreshButton").addEventListener("click", refreshPrice);
+  byId("currencySelect").addEventListener("change", render);
+  byId("historyDay").addEventListener("change", render);
+
+  setLanguage(language);
+})();
+</script>
+</body>
+</html>
