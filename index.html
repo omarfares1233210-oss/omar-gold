@@ -30,8 +30,8 @@
       font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
     }
 
-    button, select, input { font:inherit }
-    button, select, input {
+    button, select { font:inherit }
+    button, select {
       color:var(--text);
       background:var(--panel2);
       border:1px solid var(--line);
@@ -46,9 +46,8 @@
 
     button:hover { border-color:var(--gold); transform:translateY(-1px) }
     button:active { transform:scale(.98) }
-    select, input { padding:11px 12px }
-    input { width:100% }
-    input:focus,select:focus { outline:2px solid #e8bd6255; border-color:var(--gold) }
+    select { padding:11px 12px }
+    select:focus { outline:2px solid #e8bd6255; border-color:var(--gold) }
 
     header {
       position:sticky;
@@ -70,11 +69,11 @@
     }
 
     .brand { color:var(--gold); font-size:21px; font-weight:800 }
-    .header-actions,.nav,.inline { display:flex; align-items:center; gap:8px }
+    .header-actions { display:flex; align-items:center; gap:8px }
     .header-actions button { padding:9px 11px }
 
     main { max-width:920px; margin:18px auto; padding:0 14px }
-    .nav { overflow:auto; padding:2px 0 12px; justify-content:flex-start }
+    .nav { overflow:auto; padding:2px 0 12px; display:flex; gap:8px; justify-content:flex-start }
     .nav a {
       white-space:nowrap;
       text-decoration:none;
@@ -105,7 +104,7 @@
       flex-wrap:wrap;
     }
 
-    h1,h2,h3 { margin:0 }
+    h1,h2 { margin:0 }
     h1 { font-size:20px }
     h2 { font-size:19px }
     p { line-height:1.8 }
@@ -144,12 +143,6 @@
     .note { margin-bottom:0 }
     .forecast-box { border-inline-start:3px solid var(--gold); padding:8px 13px; margin-top:12px; line-height:1.8 }
     #chart { display:block; width:100%; height:140px; margin-top:12px }
-    .settings-panel { margin-top:14px }
-    .settings-panel summary { cursor:pointer; color:var(--gold); font-weight:750; padding:5px 0 }
-    .settings-body { padding-top:8px }
-    label { display:block; margin:13px 0 6px; font-size:14px }
-    .button-row { display:flex; gap:9px; flex-wrap:wrap; margin-top:14px }
-    .secondary-button { background:transparent }
     footer { text-align:center; color:var(--muted); font-size:12px; padding:10px 15px 28px }
 
     @media(max-width:520px) {
@@ -171,9 +164,6 @@
     <div class="brand">✦ <span data-ar="عمر الذهب" data-en="Omer Gold">عمر الذهب</span></div>
     <div class="header-actions">
       <button id="languageButton" type="button" aria-label="تغيير اللغة">English</button>
-      <button id="openSettingsButton" type="button">
-        ⚙ <span data-ar="الإعدادات" data-en="Settings">الإعدادات</span>
-      </button>
     </div>
   </div>
 </header>
@@ -201,7 +191,7 @@
 
     <div class="price" id="ouncePrice">—</div>
     <div class="change" id="priceChange">—</div>
-    <div class="status" id="statusText">جاري جلب أسعار الذهب تلقائياً...</div>
+    <div class="status" id="statusText">جاري جلب أسعار الذهب تلقائياً للجميع...</div>
   </section>
 
   <section class="card" id="karats">
@@ -235,38 +225,19 @@
     </div>
     <div class="price" style="font-size:30px" id="historyPrice">—</div>
     <svg id="chart" viewBox="0 0 600 140" preserveAspectRatio="none" aria-label="رسم سجل الأسعار"></svg>
-    <p class="note" id="historyMessage">يُحفظ السجل من أول تحديث على هذا الجهاز؛ لن تظهر تواريخ سابقة لم تُسجّل من قبل.</p>
+    <p class="note" id="historyMessage">يُحفظ السجل بشكل مباشر لعرض حركة الأسعار.</p>
   </section>
 
   <section class="card" id="forecast">
     <h2 data-ar="اتجاه السعر القادم" data-en="Indicative price direction">اتجاه السعر القادم</h2>
-    <div class="forecast-box" id="forecastText">سيظهر اتجاه تقريبي بعد حفظ أكثر من قراءة للسعر.</div>
-    <p class="note" data-ar="هذا تقدير حسابي بسيط من قراءات الموقع السابقة، وليس ضمانًا للسعر القادم أو نصيحة استثمارية." data-en="This is a simple estimate from saved readings, not a guarantee or investment advice.">هذا تقدير حسابي بسيط من قراءات الموقع السابقة، وليس ضمانًا للسعر القادم أو نصيحة استثمارية.</p>
+    <div class="forecast-box" id="forecastText">سيظهر اتجاه تقريبي بناءً على حركة الأسعار.</div>
+    <p class="note" data-ar="هذا تقدير حسابي بسيط، وليس ضمانًا للسعر القادم أو نصيحة استثمارية." data-en="This is a simple estimate, not a guarantee or investment advice.">هذا تقدير حسابي بسيط، وليس ضمانًا للسعر القادم أو نصيحة استثمارية.</p>
   </section>
 
   <section class="card" id="factors">
     <h2 data-ar="أسباب قد تؤثر في الذهب" data-en="Factors that may affect gold">أسباب قد تؤثر في الذهب</h2>
-    <p data-ar="من العوامل المحتملة: أسعار الفائدة، قوة الدولار، التضخم، مشتريات البنوك المركزية، والتوترات السياسية. هذه عوامل عامة؛ الموقع لا يتحقق من أخبار اليوم ولا يجزم بسبب حركة السعر." data-en="Possible factors include interest rates, the US dollar, inflation, central-bank purchases, and geopolitical tensions. These are general factors; this site does not verify today's news or claim a specific cause for price moves.">من العوامل المحتملة: أسعار الفائدة، قوة الدولار، التضخم، مشتريات البنوك المركزية، والتوترات السياسية. هذه عوامل عامة؛ الموقع لا يتحقق من أخبار اليوم ولا يجزم بسبب حركة السعر.</p>
+    <p data-ar="من العوامل المحتملة: أسعار الفائدة، قوة الدولار، التضخم، مشتريات البنوك المركزية، والتوترات السياسية." data-en="Possible factors include interest rates, the US dollar, inflation, central-bank purchases, and geopolitical tensions.">من العوامل المحتملة: أسعار الفائدة، قوة الدولار، التضخم، مشتريات البنوك المركزية، والتوترات السياسية.</p>
   </section>
-
-  <details class="card settings-panel" id="settingsPanel">
-    <summary data-ar="إعدادات الموقع والعملات" data-en="Site and currency settings">إعدادات الموقع والعملات</summary>
-    <div class="settings-body">
-      <label for="apiKey" data-ar="مفتاح API لأسعار الذهب" data-en="Gold-price API key">مفتاح API لأسعار الذهب</label>
-      <input id="apiKey" type="password" autocomplete="off" placeholder="API key">
-
-      <label for="sypRate" data-ar="عدد الليرات السورية لكل دولار" data-en="Syrian pounds per US dollar">عدد الليرات السورية لكل دولار</label>
-      <input id="sypRate" type="number" min="0" step="any" placeholder="أدخل سعر الصرف">
-
-      <label for="sarRate" data-ar="عدد الريالات السعودية لكل دولار" data-en="Saudi riyals per US dollar">عدد الريالات السعودية لكل دولار</label>
-      <input id="sarRate" type="number" min="0" step="any" value="3.75">
-
-      <div class="button-row">
-        <button id="saveSettingsButton" type="button" data-ar="حفظ الإعدادات" data-en="Save settings">حفظ الإعدادات</button>
-        <button id="closeSettingsButton" class="secondary-button" type="button" data-ar="إغلاق الإعدادات" data-en="Close settings">إغلاق الإعدادات</button>
-      </div>
-    </div>
-  </details>
 </main>
 
 <footer>
@@ -279,9 +250,15 @@
   "use strict";
 
   const byId = id => document.getElementById(id);
-  const SETTINGS_KEY = "omerGoldSettings";
   const HISTORY_KEY = "omerGoldHistory";
   const LANGUAGE_KEY = "omerGoldLanguage";
+
+  // إعدادات ثابتة للعام (مفتاح الـ API وأسعار الصرف الافتراضية)
+  const CONFIG = {
+    apiKey: "FS7CBUEULRE8OJKJCCXN924KJCCXN",
+    sarRate: 3.75,
+    sypRate: 15000 // يمكنك تعديل سعر الصرف الافتراضي لليرة هنا متى شئت
+  };
 
   function readStorage(key, fallback) {
     try {
@@ -293,22 +270,10 @@
   }
 
   let language = localStorage.getItem(LANGUAGE_KEY) || "ar";
-  
-  // وضع المفتاح الافتراضي الخاص بك هنا ليعمل تلقائياً للجميع
-  let settings = readStorage(SETTINGS_KEY, {
-    apiKey: "FS7CBUEULRE8OJKJCCXN924KJCCXN",
-    sypRate: "15000", // سعر افتراضي تقريبي لليرة السورية، يمكن تغييره
-    sarRate: "3.75"
-  });
-
   let history = readStorage(HISTORY_KEY, []);
   if (!Array.isArray(history)) history = [];
 
   let ounceUSD = null;
-
-  byId("apiKey").value = settings.apiKey || "";
-  byId("sypRate").value = settings.sypRate || "";
-  byId("sarRate").value = settings.sarRate || "3.75";
 
   function t(ar, en) {
     return language === "ar" ? ar : en;
@@ -354,8 +319,8 @@
   function exchangeRate() {
     const currency = byId("currencySelect").value;
     if (currency === "USD") return 1;
-    if (currency === "SAR") return Number(settings.sarRate) > 0 ? Number(settings.sarRate) : 3.75;
-    return Number(settings.sypRate) > 0 ? Number(settings.sypRate) : null;
+    if (currency === "SAR") return CONFIG.sarRate;
+    return CONFIG.sypRate;
   }
 
   function drawChart() {
@@ -396,9 +361,7 @@
       ["karat21", 21],
       ["karat18", 18]
     ].forEach(([id, karat]) => {
-      byId(id).textContent = rate
-        ? formatMoney(gram24USD * (karat / 24) * rate, currency)
-        : t("أدخل سعر الليرة في الإعدادات", "Enter the Syrian-pound rate in Settings");
+      byId(id).textContent = formatMoney(gram24USD * (karat / 24) * rate, currency);
     });
 
     const selectedOffset = Number(byId("historyDay").value);
@@ -426,15 +389,12 @@
   }
 
   async function refreshPrice(isAutomatic = false) {
-    const apiKey = settings.apiKey.trim();
-    if (!apiKey) return;
-
     const button = byId("refreshButton");
     if (!isAutomatic) button.disabled = true;
 
     try {
       const url = "https://api.metals.dev/v1/latest?api_key=" +
-        encodeURIComponent(apiKey) + "&currency=USD&unit=toz";
+        encodeURIComponent(CONFIG.apiKey) + "&currency=USD&unit=toz";
 
       const response = await fetch(url);
       if (!response.ok) throw new Error("HTTP " + response.status);
@@ -477,15 +437,15 @@
 
       byId("statusText").className = "status success";
       byId("statusText").textContent =
-        t("آخر تحديث تلقائي: ", "Last auto-update: ") +
+        t("آخر تحديث مباشر: ", "Last live update: ") +
         now.toLocaleTimeString(language === "ar" ? "ar" : "en");
 
       render();
     } catch (error) {
       byId("statusText").className = "status error";
       byId("statusText").textContent = t(
-        "تعذر جلب السعر تلقائياً. تأكد من الاتصال بالإنترنت.",
-        "Could not load the price automatically."
+        "تعذر جلب السعر. تحقق من الاتصال بالإنترنت.",
+        "Could not load the price. Check your connection."
       );
     } finally {
       if (!isAutomatic) button.disabled = false;
@@ -496,35 +456,13 @@
     setLanguage(language === "ar" ? "en" : "ar");
   });
 
-  byId("openSettingsButton").addEventListener("click", () => {
-    const panel = byId("settingsPanel");
-    panel.open = true;
-    panel.scrollIntoView({ behavior:"smooth", block:"center" });
-  });
-
-  byId("closeSettingsButton").addEventListener("click", () => {
-    byId("settingsPanel").open = false;
-  });
-
-  byId("saveSettingsButton").addEventListener("click", () => {
-    settings = {
-      apiKey: byId("apiKey").value.trim(),
-      sypRate: byId("sypRate").value,
-      sarRate: byId("sarRate").value
-    };
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-    byId("statusText").className = "status success";
-    byId("statusText").textContent = t("تم حفظ الإعدادات.", "Settings saved.");
-    refreshPrice();
-  });
-
   byId("refreshButton").addEventListener("click", () => refreshPrice(false));
   byId("currencySelect").addEventListener("change", render);
   byId("historyDay").addEventListener("change", render);
 
   setLanguage(language);
   
-  // جلب السعر تلقائياً بمجرد فتح أي شخص للموقع!
+  // جلب الأسعار تلقائياً للجميع فور فتح الرابط
   refreshPrice(true);
 })();
 </script>
