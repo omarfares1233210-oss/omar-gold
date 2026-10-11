@@ -144,7 +144,6 @@
     .note { margin-bottom:0 }
     .forecast-box { border-inline-start:3px solid var(--gold); padding:8px 13px; margin-top:12px; line-height:1.8 }
     #chart { display:block; width:100%; height:140px; margin-top:12px }
-    .chart-empty { color:var(--muted); padding:20px 0 }
     .settings-panel { margin-top:14px }
     .settings-panel summary { cursor:pointer; color:var(--gold); font-weight:750; padding:5px 0 }
     .settings-body { padding-top:8px }
@@ -202,7 +201,7 @@
 
     <div class="price" id="ouncePrice">—</div>
     <div class="change" id="priceChange">—</div>
-    <div class="status" id="statusText">أضف مفتاح API في الإعدادات، ثم اضغط «تحديث السعر».</div>
+    <div class="status" id="statusText">جاري جلب أسعار الذهب تلقائياً...</div>
   </section>
 
   <section class="card" id="karats">
@@ -256,7 +255,7 @@
       <label for="apiKey" data-ar="مفتاح API لأسعار الذهب" data-en="Gold-price API key">مفتاح API لأسعار الذهب</label>
       <input id="apiKey" type="password" autocomplete="off" placeholder="API key">
 
-      <label for="sypRate" data-ar="عدد الليرات السورية لكل دولار (أدخل السعر الذي تريد عرضه)" data-en="Syrian pounds per US dollar (enter the rate you want to display)">عدد الليرات السورية لكل دولار (أدخل السعر الذي تريد عرضه)</label>
+      <label for="sypRate" data-ar="عدد الليرات السورية لكل دولار" data-en="Syrian pounds per US dollar">عدد الليرات السورية لكل دولار</label>
       <input id="sypRate" type="number" min="0" step="any" placeholder="أدخل سعر الصرف">
 
       <label for="sarRate" data-ar="عدد الريالات السعودية لكل دولار" data-en="Saudi riyals per US dollar">عدد الريالات السعودية لكل دولار</label>
@@ -266,8 +265,6 @@
         <button id="saveSettingsButton" type="button" data-ar="حفظ الإعدادات" data-en="Save settings">حفظ الإعدادات</button>
         <button id="closeSettingsButton" class="secondary-button" type="button" data-ar="إغلاق الإعدادات" data-en="Close settings">إغلاق الإعدادات</button>
       </div>
-
-      <p class="note" data-ar="هذه النسخة تحفظ الإعدادات في المتصفح الحالي. لا تضع مفتاح API سريًا في موقع عام؛ جعل السعر متاحًا لجميع الزوار بأمان يحتاج إلى خادم وسيط." data-en="This version saves settings in the current browser. Do not expose a secret API key on a public site; securely sharing prices with all visitors requires a backend service.">هذه النسخة تحفظ الإعدادات في المتصفح الحالي. لا تضع مفتاح API سريًا في موقع عام؛ جعل السعر متاحًا لجميع الزوار بأمان يحتاج إلى خادم وسيط.</p>
     </div>
   </details>
 </main>
@@ -296,11 +293,14 @@
   }
 
   let language = localStorage.getItem(LANGUAGE_KEY) || "ar";
+  
+  // وضع المفتاح الافتراضي الخاص بك هنا ليعمل تلقائياً للجميع
   let settings = readStorage(SETTINGS_KEY, {
-    apiKey: "",
-    sypRate: "",
+    apiKey: "FS7CBUEULRE8OJKJCCXN924KJCCXN",
+    sypRate: "15000", // سعر افتراضي تقريبي لليرة السورية، يمكن تغييره
     sarRate: "3.75"
   });
+
   let history = readStorage(HISTORY_KEY, []);
   if (!Array.isArray(history)) history = [];
 
@@ -412,11 +412,6 @@
       ? formatMoney(Number(savedForDay.price), "USD")
       : t("لا توجد قراءة محفوظة لهذا اليوم", "No reading saved for this day");
 
-    byId("historyMessage").textContent = t(
-      "السجل محفوظ على هذا الجهاز من وقت أول تحديث؛ لا تتوفر بيانات للأيام التي سبقت ذلك.",
-      "History is saved on this device from the first refresh; earlier dates are not available."
-    );
-
     const recent = history.slice(-2);
     if (recent.length >= 2) {
       const change = Number(recent[recent.length - 1].price) - Number(recent[recent.length - 2].price);
@@ -424,33 +419,18 @@
       byId("forecastText").textContent =
         t("الاتجاه بين آخر قراءتين: ", "Direction between the last two readings: ") +
         direction + " — " + formatMoney(Math.abs(change), "USD") +
-        t(" للأونصة. هذا اتجاه حسابي قصير ولا يضمن حركة السعر القادمة.", " per ounce. This short-term calculation does not predict future prices.");
-    } else {
-      byId("forecastText").textContent = t(
-        "سيظهر اتجاه تقريبي بعد حفظ قراءتين مختلفتين على الأقل.",
-        "An indicative direction will appear after at least two readings are saved."
-      );
+        t(" للأونصة.", " per ounce.");
     }
 
     drawChart();
   }
 
-  async function refreshPrice() {
+  async function refreshPrice(isAutomatic = false) {
     const apiKey = settings.apiKey.trim();
-
-    if (!apiKey) {
-      byId("statusText").className = "status error";
-      byId("statusText").textContent = t(
-        "أدخل مفتاح API في الإعدادات ثم اضغط حفظ الإعدادات.",
-        "Enter an API key in Settings, then save your settings."
-      );
-      return;
-    }
+    if (!apiKey) return;
 
     const button = byId("refreshButton");
-    button.disabled = true;
-    byId("statusText").className = "status";
-    byId("statusText").textContent = t("جارٍ جلب السعر…", "Loading price…");
+    if (!isAutomatic) button.disabled = true;
 
     try {
       const url = "https://api.metals.dev/v1/latest?api_key=" +
@@ -493,26 +473,22 @@
         byId("priceChange").className = "change " + color;
         byId("priceChange").textContent =
           arrow + " " + formatMoney(Math.abs(difference), "USD") + " (" + percent + "%)";
-      } else {
-        byId("priceChange").className = "change";
-        byId("priceChange").textContent = t("تم جلب أول قراءة", "First reading loaded");
       }
 
       byId("statusText").className = "status success";
       byId("statusText").textContent =
-        t("آخر تحديث: ", "Last updated: ") +
-        now.toLocaleString(language === "ar" ? "ar" : "en");
+        t("آخر تحديث تلقائي: ", "Last auto-update: ") +
+        now.toLocaleTimeString(language === "ar" ? "ar" : "en");
 
       render();
     } catch (error) {
       byId("statusText").className = "status error";
       byId("statusText").textContent = t(
-        "لم ينجح جلب السعر. تحقق من مفتاح API والاتصال بالإنترنت.",
-        "Could not load the price. Check the API key and your internet connection."
+        "تعذر جلب السعر تلقائياً. تأكد من الاتصال بالإنترنت.",
+        "Could not load the price automatically."
       );
-      console.error(error);
     } finally {
-      button.disabled = false;
+      if (!isAutomatic) button.disabled = false;
     }
   }
 
@@ -538,15 +514,18 @@
     };
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
     byId("statusText").className = "status success";
-    byId("statusText").textContent = t("تم حفظ الإعدادات على هذا الجهاز.", "Settings saved on this device.");
-    render();
+    byId("statusText").textContent = t("تم حفظ الإعدادات.", "Settings saved.");
+    refreshPrice();
   });
 
-  byId("refreshButton").addEventListener("click", refreshPrice);
+  byId("refreshButton").addEventListener("click", () => refreshPrice(false));
   byId("currencySelect").addEventListener("change", render);
   byId("historyDay").addEventListener("change", render);
 
   setLanguage(language);
+  
+  // جلب السعر تلقائياً بمجرد فتح أي شخص للموقع!
+  refreshPrice(true);
 })();
 </script>
 </body>
